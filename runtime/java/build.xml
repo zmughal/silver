@@ -1,0 +1,49 @@
+<project name='SilverRuntime' default='dist' basedir='.'>
+  <description>Build the silver runtime.</description>
+
+  <property environment='env'/>
+  <property name='grammars' location='../../generated/src'/>
+  <property name='src' location='./src'/>
+  <property name='bin' location='../../generated/bin'/>
+  <property name='dist' location='.'/>
+
+  <target name='init'>
+    <tstamp>
+      <format property='TIME' pattern='MM/dd/yyyy hh:mm aa'/>
+    </tstamp>
+    <mkdir dir='${bin}'/>
+    <fail message='Generated java of grammars not found (for core, etc) at ${grammars}'>
+      <condition>
+        <not><available file='${grammars}/core' type='dir' /></not>
+      </condition>
+    </fail>
+  </target>
+
+  <target name='build' depends='init'>
+    <javac debug='on' source='1.5' srcdir='${src}:${grammars}' destdir='${bin}' includeantruntime='false'>
+      <include name='common/**/*.java' />
+      <include name='core/*.java' />
+      <include name='lib/xml/ast/*.java' />
+      <include name='silver/*.java' />
+    </javac>
+  </target>
+  
+  <target name='dist' depends='build'>
+    <jar destfile='${dist}/SilverRuntime.jar' basedir='${bin}' compress='true' level='9'>
+      <include name='common/**/*.class' />
+      <manifest>
+        <attribute name='Built-By' value='${user.name}' />
+        <section name='version'>
+          <attribute name='Build' value='${TIMESTAMP}' />
+        </section>
+      </manifest>
+    </jar>
+    <jar destfile='${dist}/RunSilver.jar' basedir='${bin}' compress='true' level='9'>
+      <include name='silver/*.class' />
+      <manifest>
+        <attribute name='Main-Class' value='silver.Compile' />
+      </manifest>
+    </jar>
+  </target>
+
+</project>
