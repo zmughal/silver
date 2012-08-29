@@ -1,0 +1,9 @@
+#!/bin/bash
+
+mkdir -p build
+cd build
+
+time java -Xss6M -Xmx5500M -jar ../jars/RunSilver.jar $@ silver:composed:Default && ant
+
+echo -e "\a"
+
