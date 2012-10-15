@@ -1,0 +1,74 @@
+
+--------------------------------------------------------------------------------
+Silver 0.3.5      Mar 19, 2012
+
+ - Now hosted on google code! http://code.google.com/p/silver
+ - New, recommended, short form syntax for concrete production listings
+ - Shell scripts for installing 'silver' script and gedit support
+ - Updated to newer version of Copper; better support for layout
+ - Attribute sections (.pp) introduced, in limited form
+ - Partial application introduced
+ - Slightly more location information available on terminals
+ - 'Production' type eliminated, along with its duplicate functions
+   (map_p...)
+ - The 'Function' type keyword is removed, as well. Signatures should
+   just be written directly.
+ - The compiler may issues warnings now, for some deprecated features.
+ - New 'conditional export' feature introduced.
+ - The compiler now uses signficantly less memory
+ - General improvements to compiler quality (e.g. code and error messages)
+ - Pattern matching bugfixes
+ - Other, various, bugfixes
+
+--------------------------------------------------------------------------------
+Silver 0.3.4      Sep 27, 2011
+
+ - New silver:util:treemap RB tree library
+ - New silver:util:deque double ended queue library
+ - New silver:util:cmdargs command line parsing library
+ - New silver:langutil:pp pretty printing library
+ - Performance and translation improvements
+ - Dramatic (30%) reduction in binary sizes
+ - Testing framework (unstable interface, yet)
+ - Update and modernization of the 'simple' tutorial language (incomplete)
+ - Minor change to the way production-specific 'layout' declarations worked
+ - Many bug fixes, including some pattern matching fixes.
+
+--------------------------------------------------------------------------------
+Silver 0.3.3      Jun 30, 2011
+
+ - Improved pattern matching support
+   - Pattern compiler
+   - Matching on multiple values
+   - Support for GADT-like productions
+   - Integration with forwarding (SLE paper)
+ - Minor bug fixes, library additions.
+
+--------------------------------------------------------------------------------
+Silver 0.3.2      Apr 22, 2011
+
+ - Improved translation, doubles performance of Silver code.
+ - GADT-like production permitted (Foo<NotATyVar> ::=)
+ - Over-specified occurences permitted (ast<Expr> on Expr_c)
+ - Clarified license: LGPL
+ - Bug fix: Silver should no longer misunderstand decoratedness of
+            children/locals/pattern variables
+ - Bug fix: Re-added missing 'lexeme' value in disambiguation groups
+ - Bug fix: Lists now work with pattern matching. (*facepalm*)
+ - Library improvements, lib:xml addition
+ - More minor bug fixes, internal improvements
+
+--------------------------------------------------------------------------------
+Silver 0.3.1      Dec 15, 2010
+
+ - New translation to Java, rather than Haskell
+ - Separate compilation of grammars
+ - Parametric Polymorphism
+ - Improved support for multiple parsers 
+ - MANY other changes
+
+--------------------------------------------------------------------------------
+Silver 0.2.1.2    Nov 28, 2007
+
+ - Last release of older, Haskell-translation Silver.
+
