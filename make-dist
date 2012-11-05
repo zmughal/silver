@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  echo "invoke make-dist with a version argument."
+  echo "For example:  ./make-dist 0.3.1-rc1"
+  exit 1
+fi
+
+SV=silver-$1
+
+if [[ -a $SV || -a $SV.tar.gz ]]; then
+  echo "error: $SV already exists?"
+  exit 1
+fi
+
+
+ln -s . $SV
+
+tar -zcvf $SV.tar.gz \
+ "--exclude=*.test" \
+ $SV/generated/whatisthis.txt \
+ $SV/jars/*.jar \
+ $SV/support/bin \
+ $SV/support/emacs \
+ $SV/support/gedit \
+ $SV/tutorials/ \
+ $SV/grammars/core/ \
+ $SV/grammars/lib/extcore/ \
+ $SV/grammars/lib/xml/ \
+ $SV/grammars/silver/testing/ \
+ $SV/grammars/silver/util/cmdargs/ \
+ $SV/grammars/silver/util/deque/ \
+ $SV/grammars/silver/util/treemap/ \
+ $SV/grammars/silver/util/raw/treemap/ \
+ $SV/grammars/silver/langutil/ \
+ $SV/COPYING.LESSER \
+ $SV/HISTORY \
+ $SV/README \
+ 
+ 
+
+
+rm $SV
