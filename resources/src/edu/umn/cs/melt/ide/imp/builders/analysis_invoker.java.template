@@ -1,0 +1,91 @@
+/*
+ * Variables used:
+ *   PKG_NAME
+ *   LANG_NAME
+ */
+package @PKG_NAME@.imp.builders;
+
+import java.io.File;
+import java.util.List;
+import java.util.Set;
+import java.util.Map.Entry;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+
+import silver.modification.impide.NIdeProperty;
+import silver.modification.impide.PmakeIdeProperty;
+import @PKG_NAME@.@LANG_NAME@Properties;
+
+import edu.umn.cs.melt.ide.silver.property.ProjectProperties;
+import edu.umn.cs.melt.ide.silver.property.Property;
+import edu.umn.cs.melt.ide.silver.misc.ConsoleLoggingStream;
+
+/**
+ * A helper class used to invoke the method Analyze(NIdeProperty[]) in the language 
+ * implementation jar.
+ * <p>
+ * Used for all-in-one plugin.
+ */
+public class @LANG_NAME@AnalysisInvoker {
+	
+	private static @LANG_NAME@AnalysisInvoker invoker;
+	
+	public static @LANG_NAME@AnalysisInvoker getInstance(){
+		if(invoker==null){
+			invoker = new @LANG_NAME@AnalysisInvoker();
+		}
+		return invoker;
+	}
+	
+	/**
+	 * 
+	 * @param projectPath	The project path relative to workspace
+	 * @param clstream		
+	 * @param monitor
+	 * @param handler
+	 * @return
+	 */
+	public boolean analyze(
+		String projectPath, 
+		ConsoleLoggingStream clstream, 
+		IProgressMonitor monitor,
+		AnalysisHandler handler) {
+
+		//Get properties
+		ProjectProperties properties = @LANG_NAME@Properties.getInstance().getByProject(projectPath);
+
+		try {
+			//Extract properties			
+			Set<Entry<String, Property>> set = properties.getAll();
+			NIdeProperty[] args = new NIdeProperty[set.size()];
+			int i=0;
+			for(Entry<String, Property> entry: set){
+				args[i] = PmakeIdeProperty.factory.invoke(
+					new common.StringCatter(entry.getKey()), 
+					new common.StringCatter(entry.getValue().getSValue())
+				);
+				i++;
+			}
+			
+			List<String> list = @PKG_NAME@.Analyze2.analyze(args);
+			return handler.handle(list);
+		} catch (Exception t) {
+			t.printStackTrace();
+			clstream.error("BUILD FAILED: failed to invoke analyzer of @LANG_NAME@.)");
+			return false;
+		}
+		
+	}
+	
+	public static interface AnalysisHandler {
+		/**
+		 * Handle the message list returned by analyzer.
+		 * 
+		 * @param list the message list. 
+		 * @return true if the build is considered successful; false otherwise
+		 */
+		boolean handle(List<String> list);
+	}
+
+}
+
