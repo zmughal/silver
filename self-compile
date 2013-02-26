@@ -1,0 +1,10 @@
+#!/bin/bash
+
+mkdir -p build
+cd build
+
+# This can be fun sometimes:   -XX:+PrintCompilation -verbose:gc
+time java -Xss6M -Xmx5500M -jar ../jars/RunSilver.jar $@ silver:composed:Default && ant
+
+echo -e "\a"
+
