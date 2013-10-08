@@ -1,0 +1,60 @@
+/*
+ * Variables used:
+ *   PKG_NAME
+ *   LANG_NAME
+ */
+package @PKG_NAME@.imp;
+
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.imp.runtime.PluginBase;
+import org.osgi.framework.BundleContext;
+
+import @PKG_NAME@.eclipse.resource.ResourceChangeListener;
+
+public class @LANG_NAME@Plugin extends PluginBase {
+
+    public static final String kPluginID = "@LANG_NAME@_IDE";
+    public static final String kLanguageID = "@LANG_NAME@";
+    
+    /**
+     * The unique instance of this plugin class
+     */
+    protected static @LANG_NAME@Plugin sPlugin;
+
+    private static IResourceChangeListener RC_LISTENER = new ResourceChangeListener();
+
+    public static @LANG_NAME@Plugin getInstance() {
+    	if (sPlugin == null)
+    		new @LANG_NAME@Plugin();
+        return sPlugin;
+    }
+
+    public @LANG_NAME@Plugin() {
+    	super();
+    	sPlugin = this;
+    }
+
+    public void start(BundleContext context) throws Exception {
+        super.start(context);
+
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(
+        	RC_LISTENER, IResourceChangeEvent.POST_CHANGE);
+    }
+
+    @Override
+    public void shutdown() {        
+        ResourcesPlugin.getWorkspace().removeResourceChangeListener(RC_LISTENER);
+    }
+
+    @Override
+    public String getID() {
+    	return kPluginID;
+    }  
+
+    @Override
+    public String getLanguageID() {
+        return kLanguageID;
+    }
+}
