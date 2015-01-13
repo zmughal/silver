@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# ./deep-clean              to test the waters (dry run)
+# ./deep-clean -delete      to blow it away
+# ./deep-clean -delete all  to blow everything away
+
+# Quick sanity check, since we'd be deleting things
+if [ ! -d grammars ] || [ ! -d tutorials ]; then
+  echo "Wrong directory? Run as ./deep-clean"
+  exit 1
+fi
+
+# Note: use ./* rather than .  This avoids looking in .hg
+find ./build/ $1
+find ./grammars/ -name "build.xml" $1
+find ./* -name "*~" $1
+find ./* -name "*.orig" $1
+find ./test/ -name "build.xml" $1
+find ./test/ -name "*.jar" $1
+find ./test/ -name "*.test.output" $1
+find ./test/ -name "*.copperdump.html" $1
+find ./runtime/ -name "SilverRuntime.jar" $1
+find ./runtime/ -name "RunSilver.jar" $1
+find ./grammars/ -name "*.jar" $1
+find ./grammars/ -name "*.test.output" $1
+find ./tutorials/ -name "*.test.output" $1
+find ./tutorials/ -name "*.copperdump.html" $1
+find ./tutorials/ -name "*.jar" $1
+find ./tutorials/ -name "build.xml" $1
+find ./tutorials/ -name "output.c" $1
+find "build.xml" $1
+find "silver.testing.bin.jar" $1
+find ./runtime/imp/main/src/core $1
+find ./runtime/imp/main/src/ide $1
+find ./runtime/imp/main/target $1
+
+if [ "$2" == "all" ]; then
+  rm -rf generated/src/* generated/bin/* runtime/java/bin/* generated/ide/*
+fi
