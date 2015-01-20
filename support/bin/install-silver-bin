@@ -1,0 +1,74 @@
+#!/bin/bash
+
+if [ ! -d ~/bin ]; then
+  echo -e "This script's purpose is to place the 'silver' script in ~/bin.\n"
+  echo "You do no have a ~/bin directory, so this script is aborting."
+  case `uname` in
+  *Darwin*) 
+    echo "There is another script 'osx-create-home-bin' that will create a"
+    echo "~/bin directory and alter your shell's path. Take a look with:"
+    echo -e "\tcat osx-create-home-bin"
+    echo -e "\t./osx-create-home-bin"
+    echo -e "\t./install-silver-bin"
+    ;;
+  *)
+    echo "In most popular linux distributions, you can simply"
+    echo -e "\tmkdir ~/bin"
+    echo "and restart your terminal, and it will work."
+    echo "But in some cases you may also have to alter your shell startup"
+    echo "scripts to include it in your PATH."
+    ;;
+  esac
+  exit 1
+fi
+
+echo "Found ~/bin"
+
+case `uname` in
+*Darwin*)
+  READLINK=greadlink
+  if [ ! -f `which greadlink` ]; then
+    echo "Missing greadlink. Please install coreutils:"
+    echo -e "\tbrew install coreutils"
+    exit 4
+  fi
+  ;;
+*)
+  READLINK=readlink
+  ;;
+esac
+
+
+if [ -f silver ]; then
+  REPO=$("$READLINK" -f ../..)
+  SCRIPT=silver
+elif [ -f support/bin/silver ]; then
+  REPO=$("$READLINK" -f .)
+  SCRIPT=support/bin/silver
+else
+  echo "Couldn't find the Silver jars!"
+  echo "(if this is a fresh checkout, run fetch-jars before this script.)"
+  exit 2
+fi
+  
+echo "Found $REPO"
+
+if [ -a ~/bin/silver ]; then
+  rm ~/bin/silver
+  echo "Removed old(?) ~/bin/silver file."
+fi
+
+ln -s "$("$READLINK" -f "$SCRIPT")" ~/bin/
+
+if [ ! $? ]; then
+  echo "Install failed!!"
+  exit 3
+fi
+
+echo "Created ~/bin/silver"
+
+# Just in case
+chmod +x "$SCRIPT"
+
+echo "Install finished."
+
