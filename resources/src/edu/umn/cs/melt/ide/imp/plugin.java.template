@@ -1,0 +1,65 @@
+/*
+ * Variables used:
+ *   PKG_NAME
+ *   LANG_NAME
+ */
+package @PKG_NAME@.imp;
+
+import org.eclipse.imp.runtime.PluginBase;
+import org.osgi.framework.BundleContext;
+
+import org.eclipse.core.runtime.CoreException;
+
+import edu.umn.cs.melt.ide.util.ProjectUtil;
+import edu.umn.cs.melt.ide.util.Util;
+import edu.umn.cs.melt.ide.util.cst.Locator;
+import edu.umn.cs.melt.ide.util.cst.DefinitionFinder;
+
+public class @LANG_NAME@Plugin extends PluginBase {
+
+    public static final String kPluginID = "@LANG_NAME@_IDE";
+    public static final String kLanguageID = "@LANG_NAME@";
+    
+    /**
+     * The unique instance of this plugin class
+     */
+    protected static @LANG_NAME@Plugin sPlugin;
+
+    public static @LANG_NAME@Plugin getInstance() {
+    	if (sPlugin == null)
+    		new @LANG_NAME@Plugin();
+        return sPlugin;
+    }
+
+    public @LANG_NAME@Plugin() {
+    	super();
+    	sPlugin = this;
+    }
+
+    public void start(BundleContext context) throws Exception {
+        super.start(context);
+
+        @PKG_NAME@.Init.initAllStatics();
+        @PKG_NAME@.Init.init();
+        @PKG_NAME@.Init.postInit();
+
+        edu.umn.cs.melt.ide.impl.SVRegistry.register(new @PKG_NAME@.SVIdeInterface());
+
+        //Set up definition locator
+        Locator.setDefinitionFinder(new DefinitionFinder());
+    }
+
+    @Override
+    public void shutdown() {        
+    }
+
+    @Override
+    public String getID() {
+    	return kPluginID;
+    }  
+
+    @Override
+    public String getLanguageID() {
+        return kLanguageID;
+    }
+}
